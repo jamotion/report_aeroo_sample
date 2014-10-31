@@ -22,8 +22,15 @@
 from openerp.osv import fields, osv
 
 class sample_report(osv.osv_memory):
-    _name = "sample.report"
-    _description = "Sample Report"
+    _name = 'report_aeroo_sample.sample_report'
+    _description = 'Sample Report'
+
+    def print_report(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = {}
+        data['form'] = self.read(cr, uid, ids, ['title', 'partner_id'])[0]
+        return self.pool['report'].get_action(cr, uid, [], 'sample_report', data=data, context=context)
 
     _columns = {
         'partner_id' : fields.many2one('res.partner', 'Partner'),
@@ -34,11 +41,5 @@ class sample_report(osv.osv_memory):
         'title': 'Test Titel',
     }
 
-    def print_report(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        data = {}
-        data['form'] = self.read(cr, uid, ids, ['title', 'partner_id'])[0]
-        return self.pool['report'].get_action(cr, uid, [], 'sample_report', data=data, context=context)
-
+sample_report()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
